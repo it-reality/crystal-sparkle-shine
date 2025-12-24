@@ -1,62 +1,63 @@
-import { Helmet } from "react-helmet-async";
-import Header from "@/components/Header";
+import SEOHead from "@/components/SEOHead";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import About from "@/components/About";
 import Quality from "@/components/Quality";
 import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+import { generateOrganizationSchema, generateLocalBusinessSchema, generateWebSiteSchema } from "@/lib/seo";
 
 const Index = () => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      generateOrganizationSchema(),
+      generateLocalBusinessSchema(),
+      generateWebSiteSchema(),
+      {
+        "@type": "CleaningService",
+        "@id": "https://crystal-fs.de/#cleaningservice",
+        "name": "Crystal Facility Services",
+        "description": "Professionelle Gebäudereinigung und Facility Services in Berlin",
+        "telephone": "+49-30-43202410",
+        "email": "info@crystal-fs.de",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Hardenbergstr. 12",
+          "addressLocality": "Berlin",
+          "postalCode": "10623",
+          "addressCountry": "DE"
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Berlin"
+        },
+        "serviceType": [
+          "Büroreinigung",
+          "Unterhaltsreinigung",
+          "Gebäudereinigung",
+          "Glasreinigung"
+        ]
+      }
+    ]
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Crystal Facility Services | Professionelle Gebäudereinigung Berlin</title>
-        <meta
-          name="description"
-          content="Professionelle Büroreinigung und Unterhaltsreinigung in Berlin für Geschäftskunden. Klare Abläufe, Qualitätskontrollen, Angebot per E-Mail anfordern."
-        />
-        <meta
-          name="keywords"
-          content="Gebäudereinigung Berlin, Büroreinigung, Unterhaltsreinigung, Facility Management, Glasreinigung, Hausmeisterdienst"
-        />
-        <link rel="canonical" href="https://crystal-fs.de" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CleaningService",
-            name: "Crystal Facility Services",
-            description:
-              "Professionelle Gebäudereinigung und Facility Services in Berlin",
-            telephone: "030 43202410",
-            email: "info@crystal-fs.de",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Berlin",
-              addressCountry: "DE",
-            },
-            areaServed: "Berlin",
-            serviceType: [
-              "Büroreinigung",
-              "Unterhaltsreinigung",
-              "Gebäudereinigung",
-              "Glasreinigung",
-            ],
-          })}
-        </script>
-      </Helmet>
+      <SEOHead
+        title="Büroreinigung & Unterhaltsreinigung Berlin"
+        description="Professionelle Büroreinigung und Unterhaltsreinigung in Berlin für Geschäftskunden. Klare Abläufe, Qualitätskontrollen, Angebot per E-Mail anfordern."
+        canonical="/"
+        schema={schema}
+        includeGeoTags
+      />
 
-      <div className="min-h-screen">
-        <Header />
-        <main>
-          <Hero />
-          <Services />
-          <About />
-          <Quality />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
+      <main>
+        <Hero />
+        <Services />
+        <About />
+        <Quality />
+        <Contact />
+      </main>
     </>
   );
 };
