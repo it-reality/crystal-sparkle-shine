@@ -1,24 +1,9 @@
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
+import { siteConfig, navLinks } from "@/data/siteConfig";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  const services = [
-    "Büroreinigung",
-    "Unterhaltsreinigung",
-    "Gebäudereinigung",
-    "Glasreinigung",
-    "Hausmeisterdienste",
-    "Gartenpflege",
-  ];
-
-  const links = [
-    { label: "Home", href: "#home" },
-    { label: "Leistungen", href: "#leistungen" },
-    { label: "Über uns", href: "#ueber-uns" },
-    { label: "Qualität", href: "#qualitaet" },
-    { label: "Kontakt", href: "#kontakt" },
-  ];
 
   return (
     <footer className="bg-foreground text-background/90">
@@ -27,7 +12,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
+            <Link to="/" className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
                 <span className="text-primary-foreground font-heading font-bold text-lg">C</span>
               </div>
@@ -37,10 +22,9 @@ const Footer = () => {
                 </span>
                 <span className="text-xs text-background/60">Facility Services</span>
               </div>
-            </div>
+            </Link>
             <p className="text-background/70 text-sm leading-relaxed mb-4">
-              Ihr professioneller Partner für Gebäudereinigung und Facility
-              Management in Berlin. Qualität, Zuverlässigkeit und
+              {siteConfig.description}. Qualität, Zuverlässigkeit und
               Kundenzufriedenheit sind unser Versprechen.
             </p>
           </div>
@@ -51,35 +35,59 @@ const Footer = () => {
               Leistungen
             </h4>
             <ul className="space-y-2">
-              {services.map((service, index) => (
-                <li key={index}>
-                  <a
-                    href="#leistungen"
-                    className="text-sm text-background/70 hover:text-primary transition-colors"
-                  >
-                    {service}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-heading font-semibold text-background mb-4">
-              Navigation
-            </h4>
-            <ul className="space-y-2">
-              {links.map((link, index) => (
-                <li key={index}>
-                  <a
-                    href={link.href}
+              {navLinks.services.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
                     className="text-sm text-background/70 hover:text-primary transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  to="/leistungen"
+                  className="text-sm text-background/70 hover:text-primary transition-colors"
+                >
+                  Alle Leistungen
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="font-heading font-semibold text-background mb-4">
+              Unternehmen
+            </h4>
+            <ul className="space-y-2">
+              {navLinks.company.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-background/70 hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  to="/preise"
+                  className="text-sm text-background/70 hover:text-primary transition-colors"
+                >
+                  Preise
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/faq"
+                  className="text-sm text-background/70 hover:text-primary transition-colors"
+                >
+                  FAQ
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -91,25 +99,34 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="tel:03043202410"
+                  href={`tel:${siteConfig.contact.phone.replace(/\s/g, "")}`}
                   className="flex items-center gap-3 text-sm text-background/70 hover:text-primary transition-colors"
                 >
                   <Phone className="h-4 w-4 shrink-0" />
-                  030 43202410
+                  {siteConfig.contact.phone}
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:info@crystal-fs.de"
+                  href={`mailto:${siteConfig.contact.email}`}
                   className="flex items-center gap-3 text-sm text-background/70 hover:text-primary transition-colors"
                 >
                   <Mail className="h-4 w-4 shrink-0" />
-                  info@crystal-fs.de
+                  {siteConfig.contact.email}
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-background/70">
                 <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
-                Berlin, Deutschland
+                <span>
+                  {siteConfig.contact.address.street}<br />
+                  {siteConfig.contact.address.postalCode} {siteConfig.contact.address.city}
+                </span>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-background/70">
+                <Clock className="h-4 w-4 shrink-0 mt-0.5" />
+                <span>
+                  Mo - Fr: {siteConfig.openingHours.opens} - {siteConfig.openingHours.closes} Uhr
+                </span>
               </li>
             </ul>
           </div>
@@ -120,15 +137,15 @@ const Footer = () => {
       <div className="border-t border-background/10">
         <div className="container py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-background/60">
-            © {currentYear} Crystal Facility Services GmbH. Alle Rechte vorbehalten.
+            © {currentYear} {siteConfig.legalName}. Alle Rechte vorbehalten.
           </p>
           <div className="flex gap-6 text-sm">
-            <a href="#" className="text-background/60 hover:text-background transition-colors">
+            <Link to="/impressum" className="text-background/60 hover:text-background transition-colors">
               Impressum
-            </a>
-            <a href="#" className="text-background/60 hover:text-background transition-colors">
+            </Link>
+            <Link to="/datenschutz" className="text-background/60 hover:text-background transition-colors">
               Datenschutz
-            </a>
+            </Link>
           </div>
         </div>
       </div>
