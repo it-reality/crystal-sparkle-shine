@@ -1,4 +1,5 @@
 import { Shield, FileCheck, ThumbsUp, Eye, Leaf, Clock } from "lucide-react";
+import { ScrollReveal, useStaggeredAnimation } from "@/hooks/use-scroll-animation";
 
 const qualityPoints = [
   {
@@ -34,11 +35,13 @@ const qualityPoints = [
 ];
 
 const Quality = () => {
+  const { ref, isVisible, getDelay } = useStaggeredAnimation(qualityPoints.length, 100);
+
   return (
     <section id="qualitaet" className="py-20 md:py-28 bg-gradient-surface">
       <div className="container">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full mb-4">
             Qualitätsversprechen
           </span>
@@ -49,14 +52,19 @@ const Quality = () => {
             Qualität ist kein Zufall – sie ist das Ergebnis konsequenter Arbeit
             und permanenter Verbesserung.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Quality Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref={ref} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {qualityPoints.map((point, index) => (
             <div
               key={index}
-              className="bg-card rounded-xl p-6 border border-border/50 hover:border-accent/30 transition-all duration-300 group"
+              className={`bg-card rounded-xl p-6 border border-border/50 hover:border-accent/30 transition-all duration-700 group ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+              style={{ transitionDelay: `${getDelay(index)}ms` }}
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-accent transition-colors duration-300">
@@ -76,29 +84,31 @@ const Quality = () => {
         </div>
 
         {/* Trust Banner */}
-        <div className="mt-16 bg-gradient-hero rounded-2xl p-8 md:p-12 text-center">
-          <h3 className="text-2xl md:text-3xl font-heading font-bold text-primary-foreground mb-4">
-            Vertrauen Sie auf unsere Erfahrung
-          </h3>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-6">
-            Über 500 zufriedene Kunden in Berlin vertrauen auf Crystal Facility
-            Services. Werden Sie Teil unserer Erfolgsstory.
-          </p>
-          <div className="flex flex-wrap justify-center gap-8 text-primary-foreground/90">
-            <div className="text-center">
-              <span className="block text-3xl font-bold">15+</span>
-              <span className="text-sm">Jahre Erfahrung</span>
-            </div>
-            <div className="text-center">
-              <span className="block text-3xl font-bold">500+</span>
-              <span className="text-sm">Kunden betreut</span>
-            </div>
-            <div className="text-center">
-              <span className="block text-3xl font-bold">98%</span>
-              <span className="text-sm">Zufriedenheitsrate</span>
+        <ScrollReveal delay={300} className="mt-16">
+          <div className="bg-gradient-hero rounded-2xl p-8 md:p-12 text-center">
+            <h3 className="text-2xl md:text-3xl font-heading font-bold text-primary-foreground mb-4">
+              Vertrauen Sie auf unsere Erfahrung
+            </h3>
+            <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-6">
+              Über 500 zufriedene Kunden in Berlin vertrauen auf Crystal Facility
+              Services. Werden Sie Teil unserer Erfolgsstory.
+            </p>
+            <div className="flex flex-wrap justify-center gap-8 text-primary-foreground/90">
+              <div className="text-center">
+                <span className="block text-3xl font-bold">15+</span>
+                <span className="text-sm">Jahre Erfahrung</span>
+              </div>
+              <div className="text-center">
+                <span className="block text-3xl font-bold">500+</span>
+                <span className="text-sm">Kunden betreut</span>
+              </div>
+              <div className="text-center">
+                <span className="block text-3xl font-bold">98%</span>
+                <span className="text-sm">Zufriedenheitsrate</span>
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
