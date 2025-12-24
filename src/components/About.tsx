@@ -1,37 +1,35 @@
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Award, Users, Clock } from "lucide-react";
+import { CheckCircle, ArrowRight } from "lucide-react";
 import { ScrollReveal, useStaggeredAnimation } from "@/hooks/use-scroll-animation";
-
-const stats = [
-  { icon: Users, value: "500+", label: "Zufriedene Kunden" },
-  { icon: Award, value: "15+", label: "Jahre Erfahrung" },
-  { icon: Clock, value: "24/7", label: "Kundenservice" },
-];
+import { Link } from "react-router-dom";
 
 const benefits = [
   "Geschultes und zuverlässiges Reinigungspersonal",
   "Flexible Reinigungszeiten nach Ihren Wünschen",
-  "Verwendung umweltfreundlicher Reinigungsmittel",
-  "Transparente Preisgestaltung ohne versteckte Kosten",
-  "Regelmäßige Qualitätskontrollen vor Ort",
-  "Persönlicher Ansprechpartner für Ihr Objekt",
+  "Umweltfreundliche Reinigungsmittel",
+  "Transparente Preisgestaltung",
+  "Regelmäßige Qualitätskontrollen",
+  "Persönlicher Ansprechpartner",
 ];
 
 const About = () => {
-  const { ref: statsRef, isVisible: statsVisible, getDelay } = useStaggeredAnimation(stats.length, 150);
+  const { ref: benefitsRef, isVisible: benefitsVisible, getDelay } = useStaggeredAnimation(benefits.length, 80);
 
   return (
-    <section id="ueber-uns" className="py-20 md:py-28 bg-card">
-      <div className="container">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <section id="ueber-uns" className="py-24 md:py-32 bg-gradient-surface relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
+      
+      <div className="container relative">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Content */}
           <ScrollReveal direction="right">
-            <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent text-sm font-medium rounded-full mb-4">
+            <span className="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-semibold rounded-full mb-6">
               Über Crystal
             </span>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-8 leading-tight">
               Ihr zuverlässiger Partner für{" "}
-              <span className="text-primary">Sauberkeit</span> in Berlin
+              <span className="text-gradient-primary">Sauberkeit</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
               Die Crystal Facility Service GmbH ist Ihr erfahrener Spezialist
@@ -39,57 +37,49 @@ const About = () => {
               unterstützen wir Unternehmen aller Branchen mit maßgeschneiderten
               Reinigungslösungen.
             </p>
-            <p className="text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-muted-foreground mb-10 leading-relaxed">
               Unser engagiertes Team legt großen Wert auf Qualität,
               Zuverlässigkeit und Kundenzufriedenheit. Wir verstehen, dass jedes
-              Objekt einzigartig ist und entwickeln individuelle Reinigungspläne,
-              die perfekt auf Ihre Anforderungen zugeschnitten sind.
+              Objekt einzigartig ist.
             </p>
 
-            {/* Benefits List */}
-            <div className="grid sm:grid-cols-2 gap-3 mb-8">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-accent shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground/80">{benefit}</span>
-                </div>
-              ))}
-            </div>
-
-            <Button variant="default" size="lg">
-              Mehr erfahren
+            <Button asChild size="lg" className="group bg-gradient-hero hover:opacity-90 border-0">
+              <Link to="/ueber-uns">
+                Mehr erfahren
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
           </ScrollReveal>
 
-          {/* Stats & Visual */}
+          {/* Benefits Card */}
           <div className="relative">
-            {/* Stats Cards */}
-            <div ref={statsRef} className="grid gap-4">
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center gap-5 bg-secondary/50 rounded-xl p-5 border border-border/50 transition-all duration-700 ${
-                    statsVisible
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 translate-x-8"
-                  }`}
-                  style={{ transitionDelay: `${getDelay(index)}ms` }}
-                >
-                  <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center shrink-0">
-                    <stat.icon className="h-7 w-7 text-primary-foreground" />
+            <div className="bg-card rounded-3xl p-8 md:p-10 shadow-xl border border-border/50">
+              <h3 className="text-xl font-heading font-semibold text-foreground mb-8">
+                Warum Crystal wählen?
+              </h3>
+              
+              <div ref={benefitsRef} className="space-y-4">
+                {benefits.map((benefit, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center gap-4 p-4 rounded-xl bg-secondary/50 border border-border/30 transition-all duration-500 ${
+                      benefitsVisible
+                        ? "opacity-100 translate-x-0"
+                        : "opacity-0 translate-x-8"
+                    }`}
+                    style={{ transitionDelay: `${getDelay(index)}ms` }}
+                  >
+                    <div className="w-10 h-10 bg-gradient-accent rounded-xl flex items-center justify-center shrink-0">
+                      <CheckCircle className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="text-foreground font-medium">{benefit}</span>
                   </div>
-                  <div>
-                    <span className="text-3xl font-heading font-bold text-foreground">
-                      {stat.value}
-                    </span>
-                    <p className="text-muted-foreground text-sm">{stat.label}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            {/* Decorative Element */}
-            <div className="absolute -z-10 -bottom-8 -right-8 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
+            {/* Decorative elements */}
+            <div className="absolute -z-10 -bottom-6 -right-6 w-full h-full bg-gradient-hero rounded-3xl opacity-10" />
           </div>
         </div>
       </div>
