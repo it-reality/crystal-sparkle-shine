@@ -4,6 +4,7 @@ import ContentSection from "@/components/ContentSection";
 import { generateBreadcrumbSchema } from "@/lib/seo";
 import { siteConfig } from "@/data/siteConfig";
 import { CheckCircle, ClipboardCheck, Repeat, MessageCircle } from "lucide-react";
+import heroImage from "@/assets/hero-qualitaet.jpg";
 
 const Qualitaet = () => {
   const schema = {
@@ -30,6 +31,7 @@ const Qualitaet = () => {
           title="Qualität & Prozesse"
           subtitle="Gleichbleibend hohe Qualität durch strukturierte Prozesse und regelmäßige Kontrollen."
           breadcrumbs={[{ label: "Qualität & Prozesse" }]}
+          backgroundImage={heroImage}
         />
         
         <ContentSection

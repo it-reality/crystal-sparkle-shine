@@ -4,6 +4,7 @@ import ServicesGrid, { ServiceItem } from "@/components/ServicesGrid";
 import ContentSection from "@/components/ContentSection";
 import { generateBreadcrumbSchema, generateServiceSchema } from "@/lib/seo";
 import { siteConfig } from "@/data/siteConfig";
+import heroImage from "@/assets/hero-services.jpg";
 import { 
   Building2, 
   Sparkles, 
@@ -83,6 +84,7 @@ const Leistungen = () => {
           subtitle="Professionelle Reinigungsdienstleistungen für Ihr Unternehmen in Berlin. Von der täglichen Büroreinigung bis zur umfassenden Gebäudebetreuung."
           breadcrumbs={[{ label: "Leistungen" }]}
           ctaText="Angebot anfordern"
+          backgroundImage={heroImage}
         />
         
         <ServicesGrid
