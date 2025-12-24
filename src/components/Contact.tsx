@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -121,37 +121,40 @@ const Contact = () => {
   };
 
   return (
-    <section id="kontakt" className="py-20 md:py-28 bg-card">
-      <div className="container">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+    <section id="kontakt" className="py-24 md:py-32 bg-gradient-surface relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] translate-y-1/2 translate-x-1/2" />
+      
+      <div className="container relative">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
           {/* Contact Info */}
           <ScrollReveal direction="right">
-            <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full mb-4">
+            <span className="inline-block px-4 py-2 bg-primary/10 text-primary text-sm font-semibold rounded-full mb-6">
               Kontakt
             </span>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6 leading-tight">
               Jetzt unverbindliches{" "}
-              <span className="text-primary">Angebot</span> anfordern
+              <span className="text-gradient-primary">Angebot</span> anfordern
             </h2>
-            <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
+            <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
               Kontaktieren Sie uns für eine kostenlose Beratung und ein
               individuelles Angebot, das auf Ihre Bedürfnisse zugeschnitten ist.
             </p>
 
             {/* Contact Cards */}
-            <div ref={cardsRef} className="grid sm:grid-cols-2 gap-4">
+            <div ref={cardsRef} className="space-y-4">
               {contactInfo.map((item, index) => (
                 <div
                   key={index}
-                  className={`flex items-start gap-4 p-4 bg-secondary/50 rounded-xl border border-border/50 transition-all duration-700 ${
+                  className={`flex items-center gap-5 p-5 bg-card rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500 ${
                     cardsVisible
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-6"
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 -translate-x-8"
                   }`}
                   style={{ transitionDelay: `${getDelay(index)}ms` }}
                 >
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                    <item.icon className="h-5 w-5 text-primary" />
+                  <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center shrink-0">
+                    <item.icon className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <span className="text-sm text-muted-foreground">
@@ -160,12 +163,12 @@ const Contact = () => {
                     {item.href ? (
                       <a
                         href={item.href}
-                        className="block font-medium text-foreground hover:text-primary transition-colors"
+                        className="block font-semibold text-foreground hover:text-primary transition-colors"
                       >
                         {item.content}
                       </a>
                     ) : (
-                      <span className="block font-medium text-foreground">
+                      <span className="block font-semibold text-foreground">
                         {item.content}
                       </span>
                     )}
@@ -177,13 +180,13 @@ const Contact = () => {
 
           {/* Contact Form */}
           <ScrollReveal direction="left" delay={200}>
-            <div className="bg-secondary/30 rounded-2xl p-6 md:p-8 border border-border/50">
-              <h3 className="text-xl font-heading font-semibold text-foreground mb-6">
+            <div className="bg-card rounded-3xl p-8 md:p-10 shadow-xl border border-border/50">
+              <h3 className="text-2xl font-heading font-bold text-foreground mb-8">
                 Schreiben Sie uns
               </h3>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                  <div className="grid sm:grid-cols-2 gap-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="grid sm:grid-cols-2 gap-5">
                     <FormField
                       control={form.control}
                       name="name"
@@ -193,7 +196,7 @@ const Contact = () => {
                           <FormControl>
                             <Input
                               placeholder="Ihr Name"
-                              className="bg-card"
+                              className="bg-secondary/50 border-border/50 h-12 rounded-xl"
                               {...field}
                             />
                           </FormControl>
@@ -210,7 +213,7 @@ const Contact = () => {
                           <FormControl>
                             <Input
                               placeholder="Firma"
-                              className="bg-card"
+                              className="bg-secondary/50 border-border/50 h-12 rounded-xl"
                               {...field}
                             />
                           </FormControl>
@@ -219,7 +222,7 @@ const Contact = () => {
                       )}
                     />
                   </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="grid sm:grid-cols-2 gap-5">
                     <FormField
                       control={form.control}
                       name="email"
@@ -230,7 +233,7 @@ const Contact = () => {
                             <Input
                               type="email"
                               placeholder="ihre@email.de"
-                              className="bg-card"
+                              className="bg-secondary/50 border-border/50 h-12 rounded-xl"
                               {...field}
                             />
                           </FormControl>
@@ -248,7 +251,7 @@ const Contact = () => {
                             <Input
                               type="tel"
                               placeholder="+49 30 12345678"
-                              className="bg-card"
+                              className="bg-secondary/50 border-border/50 h-12 rounded-xl"
                               {...field}
                             />
                           </FormControl>
@@ -266,7 +269,7 @@ const Contact = () => {
                         <FormControl>
                           <Input
                             placeholder="Worum geht es?"
-                            className="bg-card"
+                            className="bg-secondary/50 border-border/50 h-12 rounded-xl"
                             {...field}
                           />
                         </FormControl>
@@ -284,7 +287,7 @@ const Contact = () => {
                           <Textarea
                             placeholder="Beschreiben Sie Ihre Anforderungen..."
                             rows={4}
-                            className="bg-card resize-none"
+                            className="bg-secondary/50 border-border/50 resize-none rounded-xl"
                             {...field}
                           />
                         </FormControl>
@@ -294,9 +297,8 @@ const Contact = () => {
                   />
                   <Button
                     type="submit"
-                    variant="default"
-                    size="lg"
-                    className="w-full"
+                    size="xl"
+                    className="w-full group bg-gradient-hero hover:opacity-90 border-0"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -304,7 +306,7 @@ const Contact = () => {
                     ) : (
                       <>
                         Nachricht senden
-                        <Send className="h-4 w-4" />
+                        <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
                       </>
                     )}
                   </Button>
