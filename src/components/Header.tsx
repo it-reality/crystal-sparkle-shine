@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { navLinks } from "@/data/siteConfig";
+import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,16 +51,12 @@ const Header = () => {
       <nav className="bg-card/95 backdrop-blur-md border-b border-border/50 shadow-sm">
         <div className="container flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-hero rounded-xl flex items-center justify-center shadow-md">
-              <span className="text-primary-foreground font-heading font-bold text-lg md:text-xl">C</span>
-            </div>
-            <div className="hidden sm:block">
-              <span className="font-heading font-semibold text-lg text-foreground leading-tight block">
-                Crystal
-              </span>
-              <span className="text-xs text-muted-foreground">Facility Services</span>
-            </div>
+          <Link to="/" className="flex items-center">
+            <img 
+              src={logo} 
+              alt="Crystal Facility Service GmbH" 
+              className="h-12 md:h-16 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
