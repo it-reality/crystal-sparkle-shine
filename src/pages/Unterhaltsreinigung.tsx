@@ -5,6 +5,7 @@ import FAQSection from "@/components/FAQSection";
 import { generateBreadcrumbSchema, generateServiceSchema, generateFAQSchema } from "@/lib/seo";
 import { siteConfig } from "@/data/siteConfig";
 import { Calendar, Repeat, FileCheck, Settings } from "lucide-react";
+import heroImage from "@/assets/hero-unterhaltsreinigung.jpg";
 
 const faqs = [
   {
@@ -57,6 +58,7 @@ const Unterhaltsreinigung = () => {
             { label: "Unterhaltsreinigung Berlin" },
           ]}
           ctaText="Kostenloses Angebot"
+          backgroundImage={heroImage}
         />
         
         {/* Rhythmus Options */}

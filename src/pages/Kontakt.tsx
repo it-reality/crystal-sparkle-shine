@@ -3,6 +3,7 @@ import PageHero from "@/components/PageHero";
 import Contact from "@/components/Contact";
 import { generateBreadcrumbSchema } from "@/lib/seo";
 import { siteConfig } from "@/data/siteConfig";
+import heroImage from "@/assets/hero-kontakt.jpg";
 
 const Kontakt = () => {
   const schema = {
@@ -30,6 +31,7 @@ const Kontakt = () => {
           title="Kontakt aufnehmen"
           subtitle="Fordern Sie jetzt ein kostenloses, unverbindliches Angebot an. Wir melden uns innerhalb von 24 Stunden bei Ihnen."
           breadcrumbs={[{ label: "Kontakt" }]}
+          backgroundImage={heroImage}
         />
         
         <Contact />

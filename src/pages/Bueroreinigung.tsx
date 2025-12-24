@@ -5,6 +5,7 @@ import FAQSection from "@/components/FAQSection";
 import { generateBreadcrumbSchema, generateServiceSchema, generateFAQSchema } from "@/lib/seo";
 import { siteConfig } from "@/data/siteConfig";
 import { CheckCircle, Clock, Users, Shield } from "lucide-react";
+import heroImage from "@/assets/hero-bueroreinigung.jpg";
 
 const faqs = [
   {
@@ -57,6 +58,7 @@ const Bueroreinigung = () => {
             { label: "Büroreinigung Berlin" },
           ]}
           ctaText="Kostenloses Angebot"
+          backgroundImage={heroImage}
         />
         
         {/* Quick Facts */}
