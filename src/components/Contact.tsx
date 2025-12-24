@@ -3,8 +3,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const contactInfo = [
   {
@@ -22,7 +32,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Adresse",
-    content: "Berlin, Deutschland",
+    content: "Hardenbergstr. 12, 10623 Berlin",
     href: null,
   },
   {
@@ -33,24 +43,80 @@ const contactInfo = [
   },
 ];
 
+const contactFormSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, { message: "Name muss mindestens 2 Zeichen haben" })
+    .max(100, { message: "Name darf maximal 100 Zeichen haben" }),
+  company: z
+    .string()
+    .trim()
+    .max(100, { message: "Firmenname darf maximal 100 Zeichen haben" })
+    .optional()
+    .or(z.literal("")),
+  email: z
+    .string()
+    .trim()
+    .email({ message: "Bitte geben Sie eine gültige E-Mail-Adresse ein" })
+    .max(255, { message: "E-Mail darf maximal 255 Zeichen haben" }),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^(\+?\d{1,4}[\s-]?)?(\(?\d{1,5}\)?[\s-]?)?[\d\s-]{5,15}$/, {
+      message: "Bitte geben Sie eine gültige Telefonnummer ein",
+    })
+    .or(z.literal(""))
+    .optional(),
+  subject: z
+    .string()
+    .trim()
+    .min(3, { message: "Betreff muss mindestens 3 Zeichen haben" })
+    .max(200, { message: "Betreff darf maximal 200 Zeichen haben" }),
+  message: z
+    .string()
+    .trim()
+    .min(10, { message: "Nachricht muss mindestens 10 Zeichen haben" })
+    .max(2000, { message: "Nachricht darf maximal 2000 Zeichen haben" }),
+});
+
+type ContactFormValues = z.infer<typeof contactFormSchema>;
+
 const Contact = () => {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      company: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Anfrage gesendet!",
-      description: "Wir melden uns schnellstmöglich bei Ihnen.",
-    });
-    
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+  const isSubmitting = form.formState.isSubmitting;
+
+  const onSubmit = async (data: ContactFormValues) => {
+    try {
+      // Simulate form submission (replace with actual API call)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "Anfrage gesendet!",
+        description: "Vielen Dank für Ihre Nachricht. Wir melden uns schnellstmöglich bei Ihnen.",
+      });
+      
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Fehler",
+        description: "Es gab ein Problem beim Senden Ihrer Nachricht. Bitte versuchen Sie es erneut.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -108,86 +174,142 @@ const Contact = () => {
             <h3 className="text-xl font-heading font-semibold text-foreground mb-6">
               Schreiben Sie uns
             </h3>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name *</Label>
-                  <Input
-                    id="name"
-                    placeholder="Ihr Name"
-                    required
-                    className="bg-card"
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Ihr Name"
+                            className="bg-card"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="company"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Unternehmen</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Firma"
+                            className="bg-card"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="company">Unternehmen</Label>
-                  <Input
-                    id="company"
-                    placeholder="Firma"
-                    className="bg-card"
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>E-Mail *</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="ihre@email.de"
+                            className="bg-card"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Telefon</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            placeholder="+49 30 12345678"
+                            className="bg-card"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">E-Mail *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="ihre@email.de"
-                    required
-                    className="bg-card"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Telefon</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+49..."
-                    className="bg-card"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="subject">Betreff *</Label>
-                <Input
-                  id="subject"
-                  placeholder="Worum geht es?"
-                  required
-                  className="bg-card"
+                <FormField
+                  control={form.control}
+                  name="subject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Betreff *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Worum geht es?"
+                          className="bg-card"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="message">Nachricht *</Label>
-                <Textarea
-                  id="message"
-                  placeholder="Beschreiben Sie Ihre Anforderungen..."
-                  rows={4}
-                  required
-                  className="bg-card resize-none"
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nachricht *</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Beschreiben Sie Ihre Anforderungen..."
+                          rows={4}
+                          className="bg-card resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <Button
-                type="submit"
-                variant="default"
-                size="lg"
-                className="w-full"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  "Wird gesendet..."
-                ) : (
-                  <>
-                    Nachricht senden
-                    <Send className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-              <p className="text-xs text-muted-foreground text-center">
-                Mit dem Absenden stimmen Sie unserer Datenschutzerklärung zu.
-              </p>
-            </form>
+                <Button
+                  type="submit"
+                  variant="default"
+                  size="lg"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    "Wird gesendet..."
+                  ) : (
+                    <>
+                      Nachricht senden
+                      <Send className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  Mit dem Absenden stimmen Sie unserer{" "}
+                  <a href="/datenschutz" className="underline hover:text-primary">
+                    Datenschutzerklärung
+                  </a>{" "}
+                  zu.
+                </p>
+              </form>
+            </Form>
           </div>
         </div>
       </div>
