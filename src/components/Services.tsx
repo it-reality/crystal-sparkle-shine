@@ -1,4 +1,5 @@
 import { Building2, Sparkles, Home, Trees, Wrench, Shield } from "lucide-react";
+import { ScrollReveal, useStaggeredAnimation } from "@/hooks/use-scroll-animation";
 
 const services = [
   {
@@ -40,11 +41,13 @@ const services = [
 ];
 
 const Services = () => {
+  const { ref, isVisible, getDelay } = useStaggeredAnimation(services.length, 100);
+
   return (
     <section id="leistungen" className="py-20 md:py-28 bg-gradient-surface">
       <div className="container">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full mb-4">
             Unsere Leistungen
           </span>
@@ -55,15 +58,22 @@ const Services = () => {
             Entdecken Sie unser umfassendes Angebot an Facility Services für
             Geschäftskunden in Berlin und Umgebung.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref={ref} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
             <div
               key={index}
-              className="group bg-card rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-border/50 hover:border-primary/20 hover:-translate-y-1"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className={`group bg-card rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-border/50 hover:border-primary/20 hover:-translate-y-1 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+              style={{ 
+                transitionDelay: `${getDelay(index)}ms`,
+                transitionDuration: "700ms"
+              }}
             >
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
                 <service.icon className="h-7 w-7 text-primary group-hover:text-primary-foreground transition-colors" />

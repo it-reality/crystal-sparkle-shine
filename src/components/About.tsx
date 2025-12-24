@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Award, Users, Clock } from "lucide-react";
+import { ScrollReveal, useStaggeredAnimation } from "@/hooks/use-scroll-animation";
 
 const stats = [
   { icon: Users, value: "500+", label: "Zufriedene Kunden" },
@@ -17,12 +18,14 @@ const benefits = [
 ];
 
 const About = () => {
+  const { ref: statsRef, isVisible: statsVisible, getDelay } = useStaggeredAnimation(stats.length, 150);
+
   return (
     <section id="ueber-uns" className="py-20 md:py-28 bg-card">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Content */}
-          <div>
+          <ScrollReveal direction="right">
             <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent text-sm font-medium rounded-full mb-4">
               Über Crystal
             </span>
@@ -56,16 +59,21 @@ const About = () => {
             <Button variant="default" size="lg">
               Mehr erfahren
             </Button>
-          </div>
+          </ScrollReveal>
 
           {/* Stats & Visual */}
           <div className="relative">
             {/* Stats Cards */}
-            <div className="grid gap-4">
+            <div ref={statsRef} className="grid gap-4">
               {stats.map((stat, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-5 bg-secondary/50 rounded-xl p-5 border border-border/50"
+                  className={`flex items-center gap-5 bg-secondary/50 rounded-xl p-5 border border-border/50 transition-all duration-700 ${
+                    statsVisible
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 translate-x-8"
+                  }`}
+                  style={{ transitionDelay: `${getDelay(index)}ms` }}
                 >
                   <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center shrink-0">
                     <stat.icon className="h-7 w-7 text-primary-foreground" />

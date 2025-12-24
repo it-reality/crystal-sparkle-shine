@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import { ScrollReveal, useStaggeredAnimation } from "@/hooks/use-scroll-animation";
 
 export interface ContentItem {
   icon?: LucideIcon;
@@ -39,34 +40,43 @@ const ContentSection = ({
     4: "md:grid-cols-2 lg:grid-cols-4",
   };
 
+  const { ref, isVisible, getDelay } = useStaggeredAnimation(items?.length || 0, 100);
+
   return (
     <section id={id} className={`py-16 md:py-24 ${bgClasses[background]}`}>
       <div className="container">
-        <header className="text-center mb-12">
-          <h2 className={`text-3xl md:text-4xl font-heading font-bold mb-4 ${
-            background === "primary" ? "text-primary-foreground" : "text-foreground"
-          }`}>
-            {title}
-          </h2>
-          {subtitle && (
-            <p className={`text-lg max-w-2xl mx-auto ${
-              background === "primary" ? "text-primary-foreground/80" : "text-muted-foreground"
+        <ScrollReveal>
+          <header className="text-center mb-12">
+            <h2 className={`text-3xl md:text-4xl font-heading font-bold mb-4 ${
+              background === "primary" ? "text-primary-foreground" : "text-foreground"
             }`}>
-              {subtitle}
-            </p>
-          )}
-        </header>
+              {title}
+            </h2>
+            {subtitle && (
+              <p className={`text-lg max-w-2xl mx-auto ${
+                background === "primary" ? "text-primary-foreground/80" : "text-muted-foreground"
+              }`}>
+                {subtitle}
+              </p>
+            )}
+          </header>
+        </ScrollReveal>
         
         {items && items.length > 0 && (
-          <div className={`grid gap-6 ${gridClasses[columns]}`}>
+          <div ref={ref} className={`grid gap-6 ${gridClasses[columns]}`}>
             {items.map((item, index) => (
               <article 
                 key={index}
-                className={`${
+                className={`transition-all duration-700 ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+                } ${
                   variant === "cards" 
-                    ? "bg-card p-6 rounded-xl border border-border hover:shadow-lg transition-shadow" 
+                    ? "bg-card p-6 rounded-xl border border-border hover:shadow-lg" 
                     : "flex gap-4"
                 }`}
+                style={{ transitionDelay: `${getDelay(index)}ms` }}
               >
                 {item.icon && (
                   <div className={`${

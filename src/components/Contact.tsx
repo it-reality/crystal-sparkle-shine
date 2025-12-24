@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { ScrollReveal, useStaggeredAnimation } from "@/hooks/use-scroll-animation";
 import {
   Form,
   FormControl,
@@ -84,6 +84,7 @@ type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 const Contact = () => {
   const { toast } = useToast();
+  const { ref: cardsRef, isVisible: cardsVisible, getDelay } = useStaggeredAnimation(contactInfo.length, 100);
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -124,7 +125,7 @@ const Contact = () => {
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Info */}
-          <div>
+          <ScrollReveal direction="right">
             <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full mb-4">
               Kontakt
             </span>
@@ -138,11 +139,16 @@ const Contact = () => {
             </p>
 
             {/* Contact Cards */}
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div ref={cardsRef} className="grid sm:grid-cols-2 gap-4">
               {contactInfo.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-4 p-4 bg-secondary/50 rounded-xl border border-border/50"
+                  className={`flex items-start gap-4 p-4 bg-secondary/50 rounded-xl border border-border/50 transition-all duration-700 ${
+                    cardsVisible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-6"
+                  }`}
+                  style={{ transitionDelay: `${getDelay(index)}ms` }}
                 >
                   <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                     <item.icon className="h-5 w-5 text-primary" />
@@ -167,25 +173,99 @@ const Contact = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Contact Form */}
-          <div className="bg-secondary/30 rounded-2xl p-6 md:p-8 border border-border/50">
-            <h3 className="text-xl font-heading font-semibold text-foreground mb-6">
-              Schreiben Sie uns
-            </h3>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                <div className="grid sm:grid-cols-2 gap-4">
+          <ScrollReveal direction="left" delay={200}>
+            <div className="bg-secondary/30 rounded-2xl p-6 md:p-8 border border-border/50">
+              <h3 className="text-xl font-heading font-semibold text-foreground mb-6">
+                Schreiben Sie uns
+              </h3>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name *</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Ihr Name"
+                              className="bg-card"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="company"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Unternehmen</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Firma"
+                              className="bg-card"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>E-Mail *</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="ihre@email.de"
+                              className="bg-card"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Telefon</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="tel"
+                              placeholder="+49 30 12345678"
+                              className="bg-card"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="subject"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name *</FormLabel>
+                        <FormLabel>Betreff *</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ihr Name"
+                            placeholder="Worum geht es?"
                             className="bg-card"
                             {...field}
                           />
@@ -196,14 +276,15 @@ const Contact = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="company"
+                    name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Unternehmen</FormLabel>
+                        <FormLabel>Nachricht *</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Firma"
-                            className="bg-card"
+                          <Textarea
+                            placeholder="Beschreiben Sie Ihre Anforderungen..."
+                            rows={4}
+                            className="bg-card resize-none"
                             {...field}
                           />
                         </FormControl>
@@ -211,106 +292,33 @@ const Contact = () => {
                       </FormItem>
                     )}
                   />
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>E-Mail *</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="ihre@email.de"
-                            className="bg-card"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                  <Button
+                    type="submit"
+                    variant="default"
+                    size="lg"
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      "Wird gesendet..."
+                    ) : (
+                      <>
+                        Nachricht senden
+                        <Send className="h-4 w-4" />
+                      </>
                     )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Telefon</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="tel"
-                            placeholder="+49 30 12345678"
-                            className="bg-card"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <FormField
-                  control={form.control}
-                  name="subject"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Betreff *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Worum geht es?"
-                          className="bg-card"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nachricht *</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Beschreiben Sie Ihre Anforderungen..."
-                          rows={4}
-                          className="bg-card resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="submit"
-                  variant="default"
-                  size="lg"
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    "Wird gesendet..."
-                  ) : (
-                    <>
-                      Nachricht senden
-                      <Send className="h-4 w-4" />
-                    </>
-                  )}
-                </Button>
-                <p className="text-xs text-muted-foreground text-center">
-                  Mit dem Absenden stimmen Sie unserer{" "}
-                  <a href="/datenschutz" className="underline hover:text-primary">
-                    Datenschutzerklärung
-                  </a>{" "}
-                  zu.
-                </p>
-              </form>
-            </Form>
-          </div>
+                  </Button>
+                  <p className="text-xs text-muted-foreground text-center">
+                    Mit dem Absenden stimmen Sie unserer{" "}
+                    <a href="/datenschutz" className="underline hover:text-primary">
+                      Datenschutzerklärung
+                    </a>{" "}
+                    zu.
+                  </p>
+                </form>
+              </Form>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
