@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { siteConfig, navLinks } from "@/data/siteConfig";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,16 +13,12 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                <span className="text-primary-foreground font-heading font-bold text-lg">C</span>
-              </div>
-              <div>
-                <span className="font-heading font-semibold text-lg text-background block">
-                  Crystal
-                </span>
-                <span className="text-xs text-background/60">Facility Services</span>
-              </div>
+            <Link to="/" className="inline-block mb-4">
+              <img 
+                src={logo} 
+                alt="Crystal Facility Service GmbH" 
+                className="h-16 w-auto brightness-0 invert"
+              />
             </Link>
             <p className="text-background/70 text-sm leading-relaxed mb-4">
               {siteConfig.description}. Qualität, Zuverlässigkeit und
