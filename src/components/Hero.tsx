@@ -12,6 +12,8 @@ const Hero = () => {
           src={heroImage}
           alt="Professionelle Büroreinigung in Berlin"
           className="w-full h-full object-cover"
+          loading="eager"
+          fetchPriority="high"
         />
         {/* Modern gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/95 via-foreground/80 to-foreground/40" />
