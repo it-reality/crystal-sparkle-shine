@@ -4,6 +4,7 @@ import Services from "@/components/Services";
 import About from "@/components/About";
 import Quality from "@/components/Quality";
 import Contact from "@/components/Contact";
+import { TestimonialsSlider } from "@/components/TestimonialsSlider";
 import { generateOrganizationSchema, generateLocalBusinessSchema, generateWebSiteSchema } from "@/lib/seo";
 
 const Index = () => {
@@ -56,6 +57,7 @@ const Index = () => {
         <Services />
         <About />
         <Quality />
+        <TestimonialsSlider />
         <Contact />
       </main>
     </>
