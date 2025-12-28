@@ -14,16 +14,195 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      content_blocks: {
+        Row: {
+          block_key: string
+          button_link: string | null
+          button_text: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          stats: Json | null
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          block_key: string
+          button_link?: string | null
+          button_text?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          stats?: Json | null
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          block_key?: string
+          button_link?: string | null
+          button_text?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          stats?: Json | null
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          client_ip: unknown
+          client_name: string
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          phone: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status: Database["public"]["Enums"]["lead_status"]
+          updated_at: string
+        }
+        Insert: {
+          client_ip?: unknown
+          client_name: string
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Update: {
+          client_ip?: unknown
+          client_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      page_content: {
+        Row: {
+          content: Json | null
+          id: string
+          section_key: string
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          content?: Json | null
+          id?: string
+          section_key: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          content?: Json | null
+          id?: string
+          section_key?: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      service_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          id: string
+          image_url: string
+          service_key: string
+          sort_order: number | null
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          service_key: string
+          sort_order?: number | null
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          service_key?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      submit_lead_rate_limited: {
+        Args: {
+          _client_ip: string
+          _client_name: string
+          _email: string
+          _message: string
+          _phone: string
+          _service_type: Database["public"]["Enums"]["service_type"]
+        }
+        Returns: Json
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "client" | "user"
+      lead_status: "neu" | "kontaktiert" | "abgeschlossen"
+      service_type:
+        | "Büroreinigung"
+        | "Gewerbeflächen"
+        | "Gebäudereinigung"
+        | "Unterhaltsreinigung"
+        | "Sonderreinigung"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +329,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "client", "user"],
+      lead_status: ["neu", "kontaktiert", "abgeschlossen"],
+      service_type: [
+        "Büroreinigung",
+        "Gewerbeflächen",
+        "Gebäudereinigung",
+        "Unterhaltsreinigung",
+        "Sonderreinigung",
+      ],
+    },
   },
 } as const
