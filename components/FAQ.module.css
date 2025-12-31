@@ -1,0 +1,39 @@
+.faq {
+  padding: 48px 16px;
+  background: var(--surface-background, #fafafa);
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+}
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.item + .item {
+  margin-top: 12px;
+}
+.question {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  padding: 12px;
+  cursor: pointer;
+}
+.answer {
+  overflow: hidden;
+  transition: max-height 0.28s ease;
+  background: transparent;
+  padding: 0 12px;
+}
+.answer p {
+  margin: 8px 0 16px;
+}
